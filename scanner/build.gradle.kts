@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    id("maven-publish")
 }
 
 android {
@@ -35,5 +36,26 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation ("com.google.zxing:core:3.5.2")
+    implementation("com.google.zxing:core:3.5.2")
+}
+
+android.publishing {
+    singleVariant("release") {
+        withSourcesJar()
+    }
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "com.xiaopo.flying.qrcodescanner"
+            artifactId = "scanner"
+            version = "1.0"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+
+        }
+    }
 }
